@@ -9,12 +9,14 @@ Esta carpeta centraliza la documentación técnica y las evidencias de ejecució
 - [Convenciones de nombres y etiquetas](./convenciones-nombres.md)
 - [Evidencias del despliegue de infraestructura](./evidencias/infraestructura/README.md)
 - [Modelo entidad-relación de las tablas fuente](./modelo-entidad-relacion.md)
+- [Modelo dimensional Gold](./modelo-dimensional-gold.md)
 - [Evidencias de generación y carga de datos](./evidencias/datos-sinteticos/README.md)
 - [Inventario de recursos de Azure](./inventario-recursos-azure.md)
 - [Evidencias de la ingesta Bronze](./evidencias/pipelines/bronze/README.md)
 - [Evidencias del procesamiento Silver](./evidencias/pipelines/silver/README.md)
+- [Evidencias del modelo analítico Gold](./evidencias/pipelines/gold/README.md)
 
 
 ## Estado
 
-La arquitectura, la infraestructura, la generación de datos y las capas Bronze y Silver se encuentran implementadas y validadas. La capa Gold y la visualización analítica permanecen en construcción.
+La arquitectura, la infraestructura, la generación de datos y las capas Bronze, Silver y Gold se encuentran implementadas y validadas. La visualización analítica permanecen en construcción.
