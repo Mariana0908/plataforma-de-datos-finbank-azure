@@ -1,0 +1,72 @@
+[OK] Manifiesto corresponde al modo full
+[OK] Existe CSV de TB_CLIENTES_CORE
+[OK] Existe Parquet de TB_CLIENTES_CORE
+[OK] TB_CLIENTES_CORE: CSV contiene 10,000 filas
+[OK] TB_CLIENTES_CORE: Parquet contiene 10,000 filas
+[OK] Hash SHA-256 vßlido para TB_CLIENTES_CORE.csv
+[OK] Hash SHA-256 vßlido para TB_CLIENTES_CORE.parquet
+[OK] TB_CLIENTES_CORE: estructura de columnas exacta
+[OK] Existe CSV de TB_PRODUCTOS_CAT
+[OK] Existe Parquet de TB_PRODUCTOS_CAT
+[OK] TB_PRODUCTOS_CAT: CSV contiene 50 filas
+[OK] TB_PRODUCTOS_CAT: Parquet contiene 50 filas
+[OK] Hash SHA-256 vßlido para TB_PRODUCTOS_CAT.csv
+[OK] Hash SHA-256 vßlido para TB_PRODUCTOS_CAT.parquet
+[OK] TB_PRODUCTOS_CAT: estructura de columnas exacta
+[OK] Existe CSV de TB_MOV_FINANCIEROS
+[OK] Existe Parquet de TB_MOV_FINANCIEROS
+[OK] TB_MOV_FINANCIEROS: CSV contiene 500,000 filas
+[OK] TB_MOV_FINANCIEROS: Parquet contiene 500,000 filas
+[OK] Hash SHA-256 vßlido para TB_MOV_FINANCIEROS.csv
+[OK] Hash SHA-256 vßlido para TB_MOV_FINANCIEROS.parquet
+[OK] TB_MOV_FINANCIEROS: estructura de columnas exacta
+[OK] Existe CSV de TB_OBLIGACIONES
+[OK] Existe Parquet de TB_OBLIGACIONES
+[OK] TB_OBLIGACIONES: CSV contiene 30,000 filas
+[OK] TB_OBLIGACIONES: Parquet contiene 30,000 filas
+[OK] Hash SHA-256 vßlido para TB_OBLIGACIONES.csv
+[OK] Hash SHA-256 vßlido para TB_OBLIGACIONES.parquet
+[OK] TB_OBLIGACIONES: estructura de columnas exacta
+[OK] Existe CSV de TB_SUCURSALES_RED
+[OK] Existe Parquet de TB_SUCURSALES_RED
+[OK] TB_SUCURSALES_RED: CSV contiene 200 filas
+[OK] TB_SUCURSALES_RED: Parquet contiene 200 filas
+[OK] Hash SHA-256 vßlido para TB_SUCURSALES_RED.csv
+[OK] Hash SHA-256 vßlido para TB_SUCURSALES_RED.parquet
+[OK] TB_SUCURSALES_RED: estructura de columnas exacta
+[OK] Existe CSV de TB_COMISIONES_LOG
+[OK] Existe Parquet de TB_COMISIONES_LOG
+[OK] TB_COMISIONES_LOG: CSV contiene 80,000 filas
+[OK] TB_COMISIONES_LOG: Parquet contiene 80,000 filas
+[OK] Hash SHA-256 vßlido para TB_COMISIONES_LOG.csv
+[OK] Hash SHA-256 vßlido para TB_COMISIONES_LOG.parquet
+[OK] TB_COMISIONES_LOG: estructura de columnas exacta
+[OK] TB_CLIENTES_CORE: llave primaria id_cli Ýntegra
+[OK] TB_PRODUCTOS_CAT: llave primaria cod_prod Ýntegra
+[OK] TB_OBLIGACIONES: llave primaria id_oblig Ýntegra
+[OK] TB_SUCURSALES_RED: llave primaria cod_suc Ýntegra
+[OK] TB_COMISIONES_LOG: llave primaria id_comision Ýntegra
+[OK] TB_MOV_FINANCIEROS: todos los clientes existen en TB_CLIENTES_CORE
+[OK] TB_MOV_FINANCIEROS: todos los productos existen en TB_PRODUCTOS_CAT
+[OK] TB_OBLIGACIONES: todos los clientes existen en TB_CLIENTES_CORE
+[OK] TB_OBLIGACIONES: todos los productos existen en TB_PRODUCTOS_CAT
+[OK] TB_COMISIONES_LOG: todos los clientes existen en TB_CLIENTES_CORE
+[OK] TB_COMISIONES_LOG: todos los productos existen en TB_PRODUCTOS_CAT
+[OK] TB_CLIENTES_CORE.score_buro: nulos 5.00% dentro de tolerancia
+[OK] TB_CLIENTES_CORE.canal_adquis: nulos 5.00% dentro de tolerancia
+[OK] TB_MOV_FINANCIEROS.id_dispositivo: nulos 5.00% dentro de tolerancia
+[OK] TB_OBLIGACIONES.calif_riesgo: nulos 5.00% dentro de tolerancia
+[OK] TB_COMISIONES_LOG.tip_comision: nulos 5.00% dentro de tolerancia
+[OK] AnomalÝa detectada: movimientos duplicados (1500)
+[OK] AnomalÝa detectada: fechas fuera de rango (1001)
+[OK] AnomalÝa detectada: campos transaccionales inconsistentes (1502)
+[OK] Obligaciones: montos financieros consistentes
+[OK] Obligaciones: vencimiento posterior al desembolso
+[OK] Productos: tipos pertenecen al catßlogo permitido
+
+========================================================================
+RESULTADO: PASSED
+CONTROLES EXITOSOS: 65
+CONTROLES FALLIDOS: 0
+REPORTE: C:\Users\Mariana\Proyectos\plataforma-de-datos-finbank-azure\data-generation\output\validation-report.json
+========================================================================

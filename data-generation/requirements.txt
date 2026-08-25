@@ -1,0 +1,9 @@
+Faker
+numpy
+pandas
+pyarrow
+PyYAML
+pytest
+pyodbc
+azure-identity
+azure-keyvault-secrets

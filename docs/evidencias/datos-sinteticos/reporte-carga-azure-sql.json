@@ -1,0 +1,15 @@
+{
+  "status": "SUCCESS",
+  "server": "sql-finbank-dev-cus-2nctv.database.windows.net",
+  "database": "sqldb-finbank-dev",
+  "authentication": "Azure Key Vault",
+  "tables": {
+    "TB_CLIENTES_CORE": 10000,
+    "TB_PRODUCTOS_CAT": 50,
+    "TB_SUCURSALES_RED": 200,
+    "TB_OBLIGACIONES": 30000,
+    "TB_MOV_FINANCIEROS": 500000,
+    "TB_COMISIONES_LOG": 80000
+  },
+  "total_rows": 620250
+}

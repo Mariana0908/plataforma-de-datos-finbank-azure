@@ -4,12 +4,12 @@ Esta carpeta centraliza la documentación técnica y las evidencias de ejecució
 
 ## Documentos disponibles
 
-## Documentos disponibles
-
 - [Arquitectura de la plataforma](./arquitectura.md)
 - [Configuración del entorno de Azure](./configuracion-entorno-azure.md)
 - [Convenciones de nombres y etiquetas](./convenciones-nombres.md)
 - [Evidencias del despliegue de infraestructura](./evidencias/infraestructura/README.md)
+- [Modelo entidad-relación de las tablas fuente](./modelo-entidad-relacion.md)
+- [Evidencias de generación y carga de datos](./evidencias/datos-sinteticos/README.md)
 
 ## Contenido temporal
 

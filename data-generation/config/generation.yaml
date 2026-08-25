@@ -1,0 +1,47 @@
+project:
+  name: finbank
+  environment: dev
+
+generation:
+  seed: 20260825
+  start_date: "2025-08-01"
+  end_date: "2026-08-24"
+  null_percentage: 0.05
+  chunk_size: 50000
+
+tables:
+  TB_CLIENTES_CORE: 10000
+  TB_PRODUCTOS_CAT: 50
+  TB_MOV_FINANCIEROS: 500000
+  TB_OBLIGACIONES: 30000
+  TB_SUCURSALES_RED: 200
+  TB_COMISIONES_LOG: 80000
+
+geography:
+  countries:
+    - Colombia
+    - Mexico
+    - Peru
+    - Chile
+    - Argentina
+
+output:
+  directory: "output"
+  formats:
+    - csv
+    - parquet
+  csv_separator: ","
+  csv_encoding: "utf-8"
+
+anomalies:
+  duplicate_transactions:
+    enabled: true
+    percentage: 0.003
+
+  out_of_range_dates:
+    enabled: true
+    percentage: 0.002
+
+  inconsistent_transaction_fields:
+    enabled: true
+    percentage: 0.003
