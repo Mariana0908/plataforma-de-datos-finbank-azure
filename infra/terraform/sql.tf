@@ -5,9 +5,9 @@ resource "random_password" "sql_admin" {
 }
 
 resource "azurerm_mssql_server" "main" {
-  name                = "sql-${local.name_prefix}-${local.region_code}-${local.unique_suffix}"
+  name                = "sql-${local.name_prefix}-${local.sql_region_code}-${local.unique_suffix}"
   resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
+  location            = var.sql_location
   version             = "12.0"
 
   administrator_login          = var.sql_admin_login

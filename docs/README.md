@@ -9,6 +9,7 @@ Esta carpeta centraliza la documentación técnica y las evidencias de ejecució
 - [Arquitectura de la plataforma](./arquitectura.md)
 - [Configuración del entorno de Azure](./configuracion-entorno-azure.md)
 - [Convenciones de nombres y etiquetas](./convenciones-nombres.md)
+- [Evidencias del despliegue de infraestructura](./evidencias/infraestructura/README.md)
 
 ## Contenido temporal
 

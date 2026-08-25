@@ -59,3 +59,9 @@ variable "alert_email" {
     error_message = "Debe proporcionar una dirección de correo válida."
   }
 }
+
+variable "sql_location" {
+  description = "Región alternativa para Azure SQL cuando la región principal presenta restricciones."
+  type        = string
+  default     = "centralus"
+}

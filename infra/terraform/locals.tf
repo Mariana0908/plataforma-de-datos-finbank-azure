@@ -8,11 +8,17 @@ resource "random_string" "suffix" {
 
 locals {
   region_codes = {
-    eastus  = "eus"
-    eastus2 = "eus2"
+    eastus    = "eus"
+    eastus2   = "eus2"
+    centralus = "cus"
   }
 
-  region_code   = lookup(local.region_codes, var.location, replace(var.location, " ", ""))
+  region_code = lookup(local.region_codes, var.location, replace(var.location, " ", ""))
+  sql_region_code = lookup(
+    local.region_codes,
+    var.sql_location,
+    replace(var.sql_location, " ", "")
+  )
   name_prefix   = "${var.project_name}-${var.environment}"
   unique_suffix = random_string.suffix.result
 
