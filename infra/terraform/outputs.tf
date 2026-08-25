@@ -51,3 +51,18 @@ output "action_group_name" {
   description = "Nombre del Action Group."
   value       = azurerm_monitor_action_group.main.name
 }
+
+output "databricks_access_connector_name" {
+  description = "Nombre del Access Connector utilizado por Azure Databricks."
+  value       = azurerm_databricks_access_connector.main.name
+}
+
+output "databricks_access_connector_id" {
+  description = "Identificador del Access Connector utilizado por Azure Databricks."
+  value       = azurerm_databricks_access_connector.main.id
+}
+
+output "databricks_access_connector_principal_id" {
+  description = "Identificador de la identidad administrada del Access Connector."
+  value       = azurerm_databricks_access_connector.main.identity[0].principal_id
+}

@@ -13,6 +13,7 @@ Esta carpeta contiene la infraestructura de Microsoft Azure definida mediante Te
 - contenedores Bronze, Silver y Gold
 - Azure Data Factory
 - Azure Databricks
+- Azure Databricks Access Connector con identidad administrada.
 - Azure Key Vault
 - Log Analytics Workspace;
 - Azure Monitor Action Group.
@@ -48,6 +49,7 @@ Los archivos están separados por responsabilidad:
 | `sql.tf` | Azure SQL Server, base de datos y firewall. |
 | `data-factory.tf` | Azure Data Factory y permisos asociados. |
 | `databricks.tf` | Workspace de Azure Databricks. |
+| `databricks-access.tf` | Access Connector e identidades autorizadas para acceder a ADLS Gen2. |
 | `security.tf` | Key Vault, secretos y políticas de acceso. |
 | `monitoring.tf` | Log Analytics y Action Group. |
 | `outputs.tf` | Nombres, FQDN y URL de los recursos. |
@@ -140,6 +142,7 @@ Las salidas incluyen:
 - Key Vault.
 - Data Factory.
 - Databricks Workspace y URL.
+- Databricks Access Connector: nombre, identificador y principal administrado.
 - Log Analytics Workspace.
 - Action Group.
 
@@ -157,3 +160,16 @@ La ejecución final confirmó:
 No changes. Your infrastructure matches the configuration.
 ```
 Las evidencias están disponibles en [Evidencias de infraestructura](../docs/evidencias/infraestructura/README.md).
+
+## Acceso gobernado de Databricks a ADLS Gen2
+
+Azure Databricks accede a las capas Bronze, Silver y Gold mediante un Access Connector con identidad administrada. No se almacenan claves de cuenta, tokens SAS ni secretos de almacenamiento en el código.
+
+La identidad cuenta con los roles requeridos para el acceso a datos y la administración de eventos de archivos:
+
+- `Storage Blob Data Contributor`;
+- `Storage Queue Data Contributor`;
+- `Storage Account Contributor`;
+- `EventGrid EventSubscription Contributor`.
+
+Unity Catalog utiliza esta identidad mediante una credencial de almacenamiento y ubicaciones externas independientes para las capas Medallion. Bronze permanece configurada como solo lectura, mientras que Silver y Gold permiten lectura y escritura.
