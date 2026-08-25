@@ -1,0 +1,613 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "type": "string",
+            "metadata": "Nombre de instancia de Data Factory",
+            "defaultValue": "adf-finbank-dev-eus-2nctv"
+        },
+        "ls_akv_finbank_dev_properties_typeProperties_baseUrl": {
+            "type": "string",
+            "defaultValue": "https://kv-finbank-dev-2nctv.vault.azure.net/"
+        },
+        "ls_adls_finbank_dev_properties_typeProperties_url": {
+            "type": "string",
+            "defaultValue": "https://dlsfinbankdeveus2nctv.dfs.core.windows.net/"
+        },
+        "ls_azuresql_finbank_dev_properties_typeProperties_server": {
+            "type": "string",
+            "defaultValue": "sql-finbank-dev-cus-2nctv.database.windows.net"
+        },
+        "ls_azuresql_finbank_dev_properties_typeProperties_database": {
+            "type": "string",
+            "defaultValue": "sqldb-finbank-dev"
+        },
+        "ls_azuresql_finbank_dev_properties_typeProperties_userName": {
+            "type": "string",
+            "defaultValue": "finbankadmin"
+        }
+    },
+    "variables": {
+        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+    },
+    "resources": [
+        {
+            "name": "[concat(parameters('factoryName'), '/ls_akv_finbank_dev')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureKeyVault",
+                "typeProperties": {
+                    "baseUrl": "[parameters('ls_akv_finbank_dev_properties_typeProperties_baseUrl')]"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/ls_adls_finbank_dev')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureBlobFS",
+                "typeProperties": {
+                    "url": "[parameters('ls_adls_finbank_dev_properties_typeProperties_url')]"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/ls_azuresql_finbank_dev')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureSqlDatabase",
+                "typeProperties": {
+                    "server": "[parameters('ls_azuresql_finbank_dev_properties_typeProperties_server')]",
+                    "database": "[parameters('ls_azuresql_finbank_dev_properties_typeProperties_database')]",
+                    "encrypt": "mandatory",
+                    "trustServerCertificate": false,
+                    "authenticationType": "SQL",
+                    "userName": "[parameters('ls_azuresql_finbank_dev_properties_typeProperties_userName')]",
+                    "password": {
+                        "type": "AzureKeyVaultSecret",
+                        "store": {
+                            "referenceName": "ls_akv_finbank_dev",
+                            "type": "LinkedServiceReference"
+                        },
+                        "secretName": "sql-admin-password"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/ls_akv_finbank_dev')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/ds_adls_bronze_parquet')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "ls_adls_finbank_dev",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "p_folder_path": {
+                        "type": "string",
+                        "defaultValue": "TB_CLIENTES_CORE/year=2026/month=08/day=25"
+                    },
+                    "p_file_name": {
+                        "type": "string",
+                        "defaultValue": "TB_CLIENTES_CORE_test.parquet"
+                    }
+                },
+                "annotations": [],
+                "type": "Parquet",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobFSLocation",
+                        "fileName": {
+                            "value": "@dataset().p_file_name",
+                            "type": "Expression"
+                        },
+                        "folderPath": {
+                            "value": "@dataset().p_folder_path",
+                            "type": "Expression"
+                        },
+                        "fileSystem": {
+                            "value": "bronze",
+                            "type": "Expression"
+                        }
+                    },
+                    "compressionCodec": "snappy"
+                },
+                "schema": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/ls_adls_finbank_dev')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/ds_azuresql_dynamic')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "ls_azuresql_finbank_dev",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "p_schema": {
+                        "type": "string",
+                        "defaultValue": "dbo"
+                    },
+                    "p_table": {
+                        "type": "string",
+                        "defaultValue": "TB_CLIENTES_CORE"
+                    }
+                },
+                "annotations": [],
+                "type": "AzureSqlTable",
+                "schema": [],
+                "typeProperties": {
+                    "schema": {
+                        "value": "@dataset().p_schema",
+                        "type": "Expression"
+                    },
+                    "table": {
+                        "value": "@dataset().p_table",
+                        "type": "Expression"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/ls_azuresql_finbank_dev')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/pl_bronze_ingestion')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "lkp_ingestion_config",
+                        "type": "Lookup",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "0.12:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "AzureSqlSource",
+                                "sqlReaderQuery": "EXEC ctl.usp_get_ingestion_config;",
+                                "queryTimeout": "02:00:00",
+                                "partitionOption": "None"
+                            },
+                            "dataset": {
+                                "referenceName": "ds_azuresql_dynamic",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "p_schema": "dbo",
+                                    "p_table": "TB_CLIENTES_CORE"
+                                }
+                            },
+                            "firstRowOnly": false
+                        }
+                    },
+                    {
+                        "name": "fe_ingest_tables",
+                        "type": "ForEach",
+                        "dependsOn": [
+                            {
+                                "activity": "lkp_ingestion_config",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "items": {
+                                "value": "@activity('lkp_ingestion_config').output.value",
+                                "type": "Expression"
+                            },
+                            "isSequential": true,
+                            "activities": [
+                                {
+                                    "name": "lkp_extract_command",
+                                    "type": "Lookup",
+                                    "dependsOn": [],
+                                    "policy": {
+                                        "timeout": "0.12:00:00",
+                                        "retry": 0,
+                                        "retryIntervalInSeconds": 30,
+                                        "secureOutput": false,
+                                        "secureInput": false
+                                    },
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "source": {
+                                            "type": "AzureSqlSource",
+                                            "sqlReaderStoredProcedureName": "[[ctl].[usp_get_extract_command]",
+                                            "storedProcedureParameters": {
+                                                "source_schema": {
+                                                    "type": "String",
+                                                    "value": {
+                                                        "value": "@item().source_schema",
+                                                        "type": "Expression"
+                                                    }
+                                                },
+                                                "source_table": {
+                                                    "type": "String",
+                                                    "value": "@item().source_table"
+                                                }
+                                            },
+                                            "queryTimeout": "02:00:00",
+                                            "partitionOption": "None"
+                                        },
+                                        "dataset": {
+                                            "referenceName": "ds_azuresql_dynamic",
+                                            "type": "DatasetReference",
+                                            "parameters": {
+                                                "p_schema": "@item().source_schema",
+                                                "p_table": "@item().source_table"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "sp_start_ingestion_run",
+                                    "type": "SqlServerStoredProcedure",
+                                    "dependsOn": [
+                                        {
+                                            "activity": "lkp_extract_command",
+                                            "dependencyConditions": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    ],
+                                    "policy": {
+                                        "timeout": "0.12:00:00",
+                                        "retry": 0,
+                                        "retryIntervalInSeconds": 30,
+                                        "secureOutput": false,
+                                        "secureInput": false
+                                    },
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "storedProcedureName": "[[ctl].[usp_start_ingestion_run]",
+                                        "storedProcedureParameters": {
+                                            "batch_id": {
+                                                "value": {
+                                                    "value": "@pipeline().RunId",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "String"
+                                            },
+                                            "pipeline_run_id": {
+                                                "value": {
+                                                    "value": "@pipeline().RunId",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "String"
+                                            },
+                                            "source_table": {
+                                                "value": {
+                                                    "value": "@item().source_table",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "String"
+                                            },
+                                            "started_at_utc": {
+                                                "value": {
+                                                    "value": "@utcNow()",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "DateTime"
+                                            }
+                                        }
+                                    },
+                                    "linkedServiceName": {
+                                        "referenceName": "ls_azuresql_finbank_dev",
+                                        "type": "LinkedServiceReference"
+                                    }
+                                },
+                                {
+                                    "name": "cpy_sql_to_bronze",
+                                    "type": "Copy",
+                                    "dependsOn": [
+                                        {
+                                            "activity": "sp_start_ingestion_run",
+                                            "dependencyConditions": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    ],
+                                    "policy": {
+                                        "timeout": "0.12:00:00",
+                                        "retry": 0,
+                                        "retryIntervalInSeconds": 30,
+                                        "secureOutput": false,
+                                        "secureInput": false
+                                    },
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "source": {
+                                            "type": "AzureSqlSource",
+                                            "additionalColumns": [
+                                                {
+                                                    "name": "_ingestion_timestamp_utc",
+                                                    "value": {
+                                                        "value": "@utcNow()",
+                                                        "type": "Expression"
+                                                    }
+                                                },
+                                                {
+                                                    "name": "_source_system",
+                                                    "value": "AZURE_SQL_FINBANK"
+                                                },
+                                                {
+                                                    "name": "_batch_id",
+                                                    "value": {
+                                                        "value": "@pipeline().RunId",
+                                                        "type": "Expression"
+                                                    }
+                                                }
+                                            ],
+                                            "sqlReaderQuery": {
+                                                "value": "@activity('lkp_extract_command').output.firstRow.source_query",
+                                                "type": "Expression"
+                                            },
+                                            "queryTimeout": "02:00:00",
+                                            "partitionOption": "None"
+                                        },
+                                        "sink": {
+                                            "type": "ParquetSink",
+                                            "storeSettings": {
+                                                "type": "AzureBlobFSWriteSettings"
+                                            },
+                                            "formatSettings": {
+                                                "type": "ParquetWriteSettings"
+                                            }
+                                        },
+                                        "enableStaging": false,
+                                        "translator": {
+                                            "type": "TabularTranslator",
+                                            "typeConversion": true,
+                                            "typeConversionSettings": {
+                                                "allowDataTruncation": true,
+                                                "treatBooleanAsNumber": false
+                                            }
+                                        }
+                                    },
+                                    "inputs": [
+                                        {
+                                            "referenceName": "ds_azuresql_dynamic",
+                                            "type": "DatasetReference",
+                                            "parameters": {
+                                                "p_schema": "@item().source_schema",
+                                                "p_table": " @item().source_table"
+                                            }
+                                        }
+                                    ],
+                                    "outputs": [
+                                        {
+                                            "referenceName": "ds_adls_bronze_parquet",
+                                            "type": "DatasetReference",
+                                            "parameters": {
+                                                "p_folder_path": {
+                                                    "value": "@concat(\n    toLower(item().source_table),\n    '/year=', formatDateTime(utcNow(),'yyyy'),\n    '/month=', formatDateTime(utcNow(),'MM'),\n    '/day=', formatDateTime(utcNow(),'dd')\n)",
+                                                    "type": "Expression"
+                                                },
+                                                "p_file_name": {
+                                                    "value": "@concat(toLower(item().source_table),'_',pipeline().RunId,'.parquet')",
+                                                    "type": "Expression"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "sp_complete_ingestion_run",
+                                    "type": "SqlServerStoredProcedure",
+                                    "dependsOn": [
+                                        {
+                                            "activity": "cpy_sql_to_bronze",
+                                            "dependencyConditions": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    ],
+                                    "policy": {
+                                        "timeout": "0.12:00:00",
+                                        "retry": 0,
+                                        "retryIntervalInSeconds": 30,
+                                        "secureOutput": false,
+                                        "secureInput": false
+                                    },
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "storedProcedureName": "[[ctl].[usp_complete_ingestion_run]",
+                                        "storedProcedureParameters": {
+                                            "bytes_written": {
+                                                "value": {
+                                                    "value": "@activity('cpy_sql_to_bronze').output.dataWritten",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "Int64"
+                                            },
+                                            "duration_seconds": {
+                                                "value": {
+                                                    "value": "@activity('cpy_sql_to_bronze').output.copyDuration",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "Int32"
+                                            },
+                                            "new_watermark": {
+                                                "value": {
+                                                    "value": "@activity('lkp_extract_command').output.firstRow.new_watermark",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "Int64"
+                                            },
+                                            "output_path": {
+                                                "value": "@concat('bronze/',toLower(item().source_table),'/year=',formatDateTime(utcNow(),'yyyy'),'/month=',formatDateTime(utcNow(),'MM'),'/day=',formatDateTime(utcNow(),'dd'),'/',toLower(item().source_table),'_',pipeline().RunId,'.parquet')",
+                                                "type": "String"
+                                            },
+                                            "pipeline_run_id": {
+                                                "value": {
+                                                    "value": "@pipeline().RunId",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "String"
+                                            },
+                                            "rows_copied": {
+                                                "value": {
+                                                    "value": "@activity('cpy_sql_to_bronze').output.rowsCopied",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "Int64"
+                                            },
+                                            "rows_read": {
+                                                "value": {
+                                                    "value": "@activity('cpy_sql_to_bronze').output.rowsRead",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "Int64"
+                                            },
+                                            "source_table": {
+                                                "value": {
+                                                    "value": "@item().source_table",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "String"
+                                            }
+                                        }
+                                    },
+                                    "linkedServiceName": {
+                                        "referenceName": "ls_azuresql_finbank_dev",
+                                        "type": "LinkedServiceReference"
+                                    }
+                                },
+                                {
+                                    "name": "sp_fail_ingestion_run",
+                                    "type": "SqlServerStoredProcedure",
+                                    "dependsOn": [
+                                        {
+                                            "activity": "cpy_sql_to_bronze",
+                                            "dependencyConditions": [
+                                                "Failed"
+                                            ]
+                                        }
+                                    ],
+                                    "policy": {
+                                        "timeout": "0.12:00:00",
+                                        "retry": 0,
+                                        "retryIntervalInSeconds": 30,
+                                        "secureOutput": false,
+                                        "secureInput": false
+                                    },
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "storedProcedureName": "[[ctl].[usp_fail_ingestion_run]",
+                                        "storedProcedureParameters": {
+                                            "activity_name": {
+                                                "value": {
+                                                    "value": "@string('cpy_sql_to_bronze')",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "String"
+                                            },
+                                            "batch_id": {
+                                                "value": {
+                                                    "value": "@pipeline().RunId",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "String"
+                                            },
+                                            "error_code": {
+                                                "value": {
+                                                    "value": "@activity('cpy_sql_to_bronze').error.errorCode",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "String"
+                                            },
+                                            "error_details": {
+                                                "value": {
+                                                    "value": "@string(activity('cpy_sql_to_bronze').error)",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "String"
+                                            },
+                                            "error_message": {
+                                                "value": {
+                                                    "value": "@activity('cpy_sql_to_bronze').error.message",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "String"
+                                            },
+                                            "pipeline_run_id": {
+                                                "value": {
+                                                    "value": "@pipeline().RunId",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "String"
+                                            },
+                                            "source_table": {
+                                                "value": {
+                                                    "value": "@item().source_table",
+                                                    "type": "Expression"
+                                                },
+                                                "type": "String"
+                                            }
+                                        }
+                                    },
+                                    "linkedServiceName": {
+                                        "referenceName": "ls_azuresql_finbank_dev",
+                                        "type": "LinkedServiceReference"
+                                    }
+                                },
+                                {
+                                    "name": "fail_bronze_copy",
+                                    "type": "Fail",
+                                    "dependsOn": [
+                                        {
+                                            "activity": "sp_fail_ingestion_run",
+                                            "dependencyConditions": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    ],
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "message": "@activity('cpy_sql_to_bronze').error.message",
+                                        "errorCode": "BRONZE_COPY_FAILED"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "policy": {
+                    "elapsedTimeMetric": {}
+                },
+                "annotations": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/datasets/ds_azuresql_dynamic')]",
+                "[concat(variables('factoryId'), '/linkedServices/ls_azuresql_finbank_dev')]",
+                "[concat(variables('factoryId'), '/datasets/ds_adls_bronze_parquet')]"
+            ]
+        }
+    ]
+}
