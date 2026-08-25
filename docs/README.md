@@ -12,14 +12,9 @@ Esta carpeta centraliza la documentación técnica y las evidencias de ejecució
 - [Evidencias de generación y carga de datos](./evidencias/datos-sinteticos/README.md)
 - [Inventario de recursos de Azure](./inventario-recursos-azure.md)
 - [Evidencias de la ingesta Bronze](./evidencias/pipelines/bronze/README.md)
-
-## Contenido temporal
-
-- diagrama de arquitectura
-- modelo conceptual, lógico y físico
-- diagrama entidad-relación
-- decisiones y supuestos técnicos
-- inventario de recursos Azure
+- [Evidencias del procesamiento Silver](./evidencias/pipelines/silver/README.md)
 
 
-> Estado: en construcción.
+## Estado
+
+La arquitectura, la infraestructura, la generación de datos y las capas Bronze y Silver se encuentran implementadas y validadas. La capa Gold y la visualización analítica permanecen en construcción.
