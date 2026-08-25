@@ -11,6 +11,7 @@ Esta carpeta centraliza la documentación técnica y las evidencias de ejecució
 - [Modelo entidad-relación de las tablas fuente](./modelo-entidad-relacion.md)
 - [Evidencias de generación y carga de datos](./evidencias/datos-sinteticos/README.md)
 - [Inventario de recursos de Azure](./inventario-recursos-azure.md)
+- [Evidencias de la ingesta Bronze](./evidencias/pipelines/bronze/README.md)
 
 ## Contenido temporal
 
