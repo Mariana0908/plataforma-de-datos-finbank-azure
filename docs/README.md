@@ -15,8 +15,10 @@ Esta carpeta centraliza la documentación técnica y las evidencias de ejecució
 - [Evidencias de la ingesta Bronze](./evidencias/pipelines/bronze/README.md)
 - [Evidencias del procesamiento Silver](./evidencias/pipelines/silver/README.md)
 - [Evidencias del modelo analítico Gold](./evidencias/pipelines/gold/README.md)
+- [Evidencias de la orquestación end-to-end](./evidencias/orquestacion/README.md)
 
 
 ## Estado
 
-La arquitectura, la infraestructura, la generación de datos y las capas Bronze, Silver y Gold se encuentran implementadas y validadas. La visualización analítica permanecen en construcción.
+La arquitectura, la infraestructura, la generación de datos y las capas Bronze, Silver y Gold, y la orquestación end-to-end se encuentran implementadas y validadas.
+El monitoreo operativo, la visualización analítica en Power BI y la automatización CI/CD permanecen en construcción.

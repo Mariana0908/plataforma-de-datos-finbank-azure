@@ -1,6 +1,6 @@
 # Plataforma de Datos End-to-End para FinBank
 
-> **Estado del proyecto:** En desarrollo
+> **Estado del proyecto:** En desarrollo -arquitectura Medallion y orquestacion operativas
 > **Autora:** Mariana Ospina Henao
 > **Perfil:** Data Engineer
 > **Fecha de inicio:** Agosto de 2026
@@ -29,13 +29,22 @@ Se elige esta alternativa porque el servicio Cloud de Azure es el que se utiliza
 
 ### Infraestructura como código (IaC)
 
-**Terraform**.
+La infraestructura se define mediante **Terraform**.
 
-Se escogió Terraform porque permite:
+Se eligió Terraform porque permite:
 
-...(completar)
+- definir los recursos de Azure mediante configuración declarativa y versionable;
+- reproducir la infraestructura de manera consistente;
+- revisar los cambios antes de aplicarlos mediante `terraform plan`;
+- separar la configuración por ambientes;
+- administrar dependencias entre recursos;
+- conservar el estado de forma remota y segura en Azure Storage;
+- reutilizar la misma base de código para desarrollo y producción;
+- evitar configuraciones manuales difíciles de auditar o replicar.
 
-La solución soportará como mínimo los ambientes `dev` y `prod`
+La solución soporta los ambientes `dev` y `prod` mediante archivos de variables y backends remotos independientes.
+
+El ambiente `dev` se encuentra desplegado y validado. El ambiente `prod` está parametrizado y preparado para un despliegue controlado, pero no se aprovisiona durante esta prueba para evitar costos innecesarios y cambios sin una aprobación explícita.
 
 ## 2. Contexto del problema
 
@@ -70,8 +79,21 @@ La solución debe permitir:
 8. Gobierno, roles, auditoría y protección de información sensible.
 9. Monitoreo y notificaciones operacionales.
 
-### 5.1 milla extra
-10. Se decide realizar un Dashboard ejecutivo en Power BI como valor adicional.
+### 5.2 Estado de implementación
+
+| Componente | Estado |
+|---|---|
+| Infraestructura de Azure con Terraform | Implementada y validada |
+| Generación y carga de datos sintéticos | Implementada y validada |
+| Ingesta incremental Bronze | Implementada y validada |
+| Procesamiento y calidad Silver | Implementada y validada |
+| Modelo dimensional y analítico Gold | Implementado y validado |
+| Orquestación end-to-end ADF–Databricks | Implementada y validada |
+| Seguridad, identidades y control de acceso | Implementados |
+| Infraestructura de Azure con Terraform | Ambiente `dev` implementado y validado; `prod` parametrizado |
+| Monitoreo y notificaciones operacionales | En construcción |
+| Dashboard ejecutivo en Power BI | Pendiente |
+| Automatización CI/CD | Pendiente |
 
 ## 6. Estructura del repositorio
 

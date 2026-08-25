@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "value": "adf-finbank-dev-eus-2nctv"
+        },
+        "ls_adls_finbank_dev_properties_typeProperties_url": {
+            "value": "https://dlsfinbankdeveus2nctv.dfs.core.windows.net/"
+        },
+        "ls_akv_finbank_dev_properties_typeProperties_baseUrl": {
+            "value": "https://kv-finbank-dev-2nctv.vault.azure.net/"
+        },
+        "ls_azuresql_finbank_dev_properties_typeProperties_server": {
+            "value": "sql-finbank-dev-cus-2nctv.database.windows.net"
+        },
+        "ls_azuresql_finbank_dev_properties_typeProperties_database": {
+            "value": "sqldb-finbank-dev"
+        },
+        "ls_azuresql_finbank_dev_properties_typeProperties_userName": {
+            "value": "finbankadmin"
+        },
+        "tr_finbank_daily_dev_properties_pl_finbank_end_to_end_parameters_p_catalog": {
+            "value": "dbw_finbank_dev_eus"
+        },
+        "tr_finbank_daily_dev_properties_pl_finbank_end_to_end_parameters_p_start_date": {
+            "value": "2025-08-01"
+        },
+        "tr_finbank_daily_dev_properties_pl_finbank_end_to_end_parameters_p_end_date": {
+            "value": "2026-08-24"
+        },
+        "tr_finbank_daily_dev_properties_pl_finbank_end_to_end_parameters_p_analysis_end_date": {
+            "value": "2026-08-24"
+        }
+    }
+}
