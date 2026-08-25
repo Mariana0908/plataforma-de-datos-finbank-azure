@@ -1,0 +1,5 @@
+project_name    = "finbank"
+environment     = "prod"
+location        = "eastus"
+sql_location    = "centralus"
+sql_admin_login = "finbankadmin"

@@ -10,6 +10,7 @@ Esta carpeta centraliza la documentación técnica y las evidencias de ejecució
 - [Evidencias del despliegue de infraestructura](./evidencias/infraestructura/README.md)
 - [Modelo entidad-relación de las tablas fuente](./modelo-entidad-relacion.md)
 - [Evidencias de generación y carga de datos](./evidencias/datos-sinteticos/README.md)
+- [Inventario de recursos de Azure](./inventario-recursos-azure.md)
 
 ## Contenido temporal
 

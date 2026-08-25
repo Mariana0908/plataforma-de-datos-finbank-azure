@@ -1,8 +1,16 @@
-# Copiar este archivo como terraform.tfvars y reemplazar el valor de ejemplo.
-# terraform.tfvars está excluido del repositorio mediante .gitignore.
+# Plantilla de valores locales.
+#
+# Copiar como terraform.tfvars únicamente si no se utilizarán variables
+# de entorno. terraform.tfvars está excluido mediante .gitignore.
+#
+# No reemplazar estos valores de ejemplo dentro del repositorio.
 
-subscription_id = "00000000-0000-0000-0000-000000000000"
+subscription_id  = "00000000-0000-0000-0000-000000000000"
+client_ip_address = "203.0.113.10"
+alert_email       = "alertas@example.com"
+
 project_name    = "finbank"
 environment     = "dev"
 location        = "eastus"
-sql_location = "centralus"
+sql_location    = "centralus"
+sql_admin_login = "finbankadmin"

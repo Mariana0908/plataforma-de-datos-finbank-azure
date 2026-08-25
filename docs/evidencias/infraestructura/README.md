@@ -35,3 +35,29 @@ El grupo de recursos contiene los servicios principales de la plataforma:
 Azure SQL fue desplegado en Central US debido a restricciones de aprovisionamiento encontradas en East US y East US 2 para la suscripción utilizada.
 
 > Las capturas fueron recortadas para evitar la publicación de credenciales, correos e identificadores de suscripción.
+
+## 4. Migración al backend remoto
+
+![Migración del backend remoto](./04-migracion-backend-remoto.png)
+
+El estado local existente fue migrado al backend `azurerm` mediante `terraform init -migrate-state`. Terraform confirmó la inicialización y configuración exitosa del backend.
+
+## 5. Consistencia del estado remoto
+
+![Validación del backend remoto](./05-backend-remoto-consistente.png)
+
+Se verificó que:
+
+- el blob remoto existe;
+- el estado contiene 22 direcciones;
+- la configuración de Terraform es válida;
+- el plan no requiere cambios.
+
+## 6. Estado almacenado en Azure
+
+![Estado remoto en Azure Storage](./06-estado-remoto-azure-storage.png)
+
+El estado de desarrollo se encuentra en:
+
+```text
+stfinbanktf2nctv/tfstate/finbank/dev/terraform.tfstate
