@@ -1,0 +1,8 @@
+# Copiar este archivo como terraform.tfvars y reemplazar el valor de ejemplo.
+# terraform.tfvars está excluido del repositorio mediante .gitignore.
+
+subscription_id = "00000000-0000-0000-0000-000000000000"
+project_name    = "finbank"
+environment     = "dev"
+location        = "eastus"
+sql_location = "centralus"
