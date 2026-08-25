@@ -1,0 +1,5 @@
+bundle:
+  name: finbank-orchestration
+
+include:
+  - resources/*.yml

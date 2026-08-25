@@ -1,0 +1,35 @@
+resources:
+  jobs:
+    job_finbank_silver_gold_dev:
+      name: job_finbank_silver_gold_dev
+      tasks:
+        - task_key: silver_processing
+          notebook_task:
+            notebook_path: /Workspace/Users/${workspace.current_user.userName}/finbank/silver/01_bronze_to_silver
+            source: WORKSPACE
+          max_retries: 2
+          min_retry_interval_millis: 60000
+          retry_on_timeout: true
+          disable_auto_optimization: true
+        - task_key: gold_processing
+          depends_on:
+            - task_key: silver_processing
+          notebook_task:
+            notebook_path: /Workspace/Users/${workspace.current_user.userName}/finbank/gold/01_silver_to_gold
+            source: WORKSPACE
+          max_retries: 2
+          min_retry_interval_millis: 60000
+          retry_on_timeout: true
+          disable_auto_optimization: true
+      queue:
+        enabled: true
+      parameters:
+        - name: catalog
+          default: dbw_finbank_dev_eus
+        - name: start_date
+          default: 2025-08-01
+        - name: end_date
+          default: 2026-08-24
+        - name: analysis_end_date
+          default: 2026-08-24
+      performance_target: PERFORMANCE_OPTIMIZED
