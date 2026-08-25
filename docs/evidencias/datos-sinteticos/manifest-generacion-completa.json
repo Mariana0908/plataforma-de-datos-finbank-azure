@@ -1,0 +1,164 @@
+{
+  "TB_CLIENTES_CORE": {
+    "rows": 10000,
+    "columns": [
+      "id_cli",
+      "nomb_cli",
+      "apell_cli",
+      "tip_doc",
+      "num_doc",
+      "fec_nac",
+      "fec_alta",
+      "cod_segmento",
+      "score_buro",
+      "ciudad_res",
+      "depto_res",
+      "estado_cli",
+      "canal_adquis"
+    ],
+    "files": {
+      "csv": {
+        "path": "output\\csv\\TB_CLIENTES_CORE.csv",
+        "sha256": "488d90864a91e86af0b8228430f7344162058fa19b19bc0fc07db2bd2b8fd4fa"
+      },
+      "parquet": {
+        "path": "output\\parquet\\TB_CLIENTES_CORE.parquet",
+        "sha256": "725bb1bf149a228261517e2ccb07afd8bd28bcf43c5c2c5bd12f9b4cb0b239de"
+      }
+    }
+  },
+  "TB_PRODUCTOS_CAT": {
+    "rows": 50,
+    "columns": [
+      "cod_prod",
+      "desc_prod",
+      "tip_prod",
+      "tasa_ea",
+      "plazo_max_meses",
+      "cuota_min",
+      "comision_admin",
+      "estado_prod"
+    ],
+    "files": {
+      "csv": {
+        "path": "output\\csv\\TB_PRODUCTOS_CAT.csv",
+        "sha256": "5b545ceb475ca91a4c7cec83bcb644f31b044c2a4a5ed0fd1db68310c2accceb"
+      },
+      "parquet": {
+        "path": "output\\parquet\\TB_PRODUCTOS_CAT.parquet",
+        "sha256": "f335e55a27b10cc7bc3a965b289bcc2c9b22c365038cd93d813f9e4240332616"
+      }
+    }
+  },
+  "TB_MOV_FINANCIEROS": {
+    "rows": 500000,
+    "columns": [
+      "id_mov",
+      "id_cli",
+      "cod_prod",
+      "num_cuenta",
+      "fec_mov",
+      "hra_mov",
+      "vr_mov",
+      "tip_mov",
+      "cod_canal",
+      "cod_ciudad",
+      "cod_estado_mov",
+      "id_dispositivo"
+    ],
+    "files": {
+      "csv": {
+        "path": "output\\csv\\TB_MOV_FINANCIEROS.csv",
+        "sha256": "a1534a84195b14788ed41c26fce636a35ef7c601c58f0ebd50389de6b2a4d31c"
+      },
+      "parquet": {
+        "path": "output\\parquet\\TB_MOV_FINANCIEROS.parquet",
+        "sha256": "adcc32f4453308be77904bea31047255f2cb06b9046d65e3a3451c45b331d231"
+      }
+    }
+  },
+  "TB_OBLIGACIONES": {
+    "rows": 30000,
+    "columns": [
+      "id_oblig",
+      "id_cli",
+      "cod_prod",
+      "vr_aprobado",
+      "vr_desembolsado",
+      "sdo_capital",
+      "vr_cuota",
+      "fec_desembolso",
+      "fec_venc",
+      "dias_mora_act",
+      "num_cuotas_pend",
+      "calif_riesgo"
+    ],
+    "files": {
+      "csv": {
+        "path": "output\\csv\\TB_OBLIGACIONES.csv",
+        "sha256": "637038bcb419684940a38717d5bbfa7261f34670a3a01374f518c22e9b43c07e"
+      },
+      "parquet": {
+        "path": "output\\parquet\\TB_OBLIGACIONES.parquet",
+        "sha256": "b6badc326b06cb54a45ee81feae61165f69af306d760c920e0884182d62ee39d"
+      }
+    }
+  },
+  "TB_SUCURSALES_RED": {
+    "rows": 200,
+    "columns": [
+      "cod_suc",
+      "nom_suc",
+      "tip_punto",
+      "ciudad",
+      "depto",
+      "latitud",
+      "longitud",
+      "activo"
+    ],
+    "files": {
+      "csv": {
+        "path": "output\\csv\\TB_SUCURSALES_RED.csv",
+        "sha256": "6faae80151558cdaaf08a5842af74a05de39d7b5b28486d9852c7d88fd04b77a"
+      },
+      "parquet": {
+        "path": "output\\parquet\\TB_SUCURSALES_RED.parquet",
+        "sha256": "73c7eb57db0c8dddc7ded63c9b59bc6106d1335c4f17bbcf3bdf7662870d91af"
+      }
+    }
+  },
+  "TB_COMISIONES_LOG": {
+    "rows": 80000,
+    "columns": [
+      "id_comision",
+      "id_cli",
+      "cod_prod",
+      "fec_cobro",
+      "vr_comision",
+      "tip_comision",
+      "estado_cobro"
+    ],
+    "files": {
+      "csv": {
+        "path": "output\\csv\\TB_COMISIONES_LOG.csv",
+        "sha256": "86d6e7eb92796728b37016a528bc76b50f173810d0d84fcc5360868b3f31bdaa"
+      },
+      "parquet": {
+        "path": "output\\parquet\\TB_COMISIONES_LOG.parquet",
+        "sha256": "04491db22208b2cd4a075a4e3a1e486e4b42e2b1e3bb78265b416ff9a2186b61"
+      }
+    }
+  },
+  "metadata": {
+    "seed": 20260825,
+    "start_date": "2025-08-01",
+    "end_date": "2026-08-24",
+    "null_percentage": 0.05,
+    "intentional_anomalies": {
+      "duplicate_transactions": 1500,
+      "out_of_range_dates": 1000,
+      "inconsistent_transaction_fields": 1500
+    },
+    "mode": "full"
+  }
+}

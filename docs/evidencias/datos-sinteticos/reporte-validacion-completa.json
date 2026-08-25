@@ -1,0 +1,12 @@
+{
+  "status": "PASSED",
+  "mode": "full",
+  "passed_checks": 65,
+  "failed_checks": 0,
+  "detected_anomalies": {
+    "duplicate_transactions": 1500,
+    "out_of_range_dates": 1001,
+    "inconsistent_transaction_fields": 1502
+  },
+  "failures": []
+}
