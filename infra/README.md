@@ -54,6 +54,7 @@ Los archivos están separados por responsabilidad:
 | `monitoring.tf` | Log Analytics y Action Group. |
 | `outputs.tf` | Nombres, FQDN y URL de los recursos. |
 | `environments/` | Configuración separada de `dev` y `prod`. |
+| `monitoring-diagnostics.tf` | Diagnósticos de ADF y Databricks, y alertas operacionales. |
 
 ## Requisitos
 
