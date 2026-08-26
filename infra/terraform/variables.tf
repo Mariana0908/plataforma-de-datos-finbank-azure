@@ -65,3 +65,15 @@ variable "sql_location" {
   type        = string
   default     = "centralus"
 }
+
+variable "terraform_operator_object_id" {
+  description = "Object ID del operador principal de Terraform."
+  type        = string
+  sensitive   = true
+}
+
+variable "ci_deployer_object_id" {
+  description = "Object ID de la identidad utilizada por GitHub Actions."
+  type        = string
+  sensitive   = true
+}

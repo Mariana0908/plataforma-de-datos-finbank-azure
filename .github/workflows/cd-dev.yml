@@ -1,0 +1,90 @@
+name: Despliegue continuo dev
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Operación de Terraform
+        required: true
+        default: plan
+        type: choice
+        options:
+          - plan
+          - apply
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: cd-terraform-dev
+  cancel-in-progress: false
+
+jobs:
+  terraform:
+    name: Terraform dev
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: dev
+
+    defaults:
+      run:
+        working-directory: infra/terraform
+
+    env:
+      AZURE_CORE_OUTPUT: none
+      TF_IN_AUTOMATION: true
+      TF_INPUT: false
+
+      ARM_USE_OIDC: true
+      ARM_USE_AZUREAD: true
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      TF_VAR_client_ip_address: ${{ secrets.TF_VAR_CLIENT_IP_ADDRESS }}
+      TF_VAR_alert_email: ${{ secrets.TF_VAR_ALERT_EMAIL }}
+      TF_VAR_terraform_operator_object_id: ${{ secrets.TF_VAR_TERRAFORM_OPERATOR_OBJECT_ID }}
+      TF_VAR_ci_deployer_object_id: ${{ secrets.TF_VAR_CI_DEPLOYER_OBJECT_ID }}
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v7
+
+      - name: Autenticar en Azure mediante OIDC
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Configurar Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.14.6"
+
+      - name: Verificar formato
+        run: terraform fmt -check -recursive
+
+      - name: Inicializar backend remoto
+        run: |
+          terraform init \
+            -reconfigure \
+            -input=false \
+            -backend-config="environments/dev.backend.hcl"
+
+      - name: Validar configuración
+        run: terraform validate -no-color
+
+      - name: Generar plan de desarrollo
+        run: |
+          terraform plan \
+            -input=false \
+            -no-color \
+            -var-file="environments/dev.tfvars" \
+            -out="dev.tfplan"
+
+      - name: Aplicar infraestructura de desarrollo
+        if: ${{ inputs.operation == 'apply' }}
+        run: terraform apply -auto-approve -input=false "dev.tfplan"
