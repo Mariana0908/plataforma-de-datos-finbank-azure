@@ -91,7 +91,7 @@ La solución debe permitir:
 | Orquestación end-to-end ADF–Databricks | Implementada y validada |
 | Seguridad, identidades y control de acceso | Implementados |
 | Infraestructura de Azure con Terraform | Ambiente `dev` implementado y validado; `prod` parametrizado |
-| Monitoreo y notificaciones operacionales | En construcción |
+| Monitoreo y notificaciones operacionales | Implementada y validada |
 | Dashboard ejecutivo en Power BI | Pendiente |
 | Automatización CI/CD | Pendiente |
 
