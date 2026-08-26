@@ -1,6 +1,6 @@
 # Plataforma de Datos End-to-End para FinBank
 
-> **Estado del proyecto:** En desarrollo -arquitectura Medallion y orquestacion operativas
+> **Estado del proyecto:** Implementación técnica completa
 > **Autora:** Mariana Ospina Henao
 > **Perfil:** Data Engineer
 > **Fecha de inicio:** Agosto de 2026
@@ -93,7 +93,7 @@ La solución debe permitir:
 | Infraestructura de Azure con Terraform | Ambiente `dev` implementado y validado; `prod` parametrizado |
 | Monitoreo y notificaciones operacionales | Implementada y validada |
 | Dashboard ejecutivo en Power BI | Pendiente |
-| Automatización CI/CD | Pendiente |
+| Automatización CI/CD | Implementada y validada |
 
 ## 6. Estructura del repositorio
 

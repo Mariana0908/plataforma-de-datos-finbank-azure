@@ -17,9 +17,10 @@ Esta carpeta centraliza la documentación técnica y las evidencias de ejecució
 - [Evidencias del modelo analítico Gold](./evidencias/pipelines/gold/README.md)
 - [Evidencias de la orquestación end-to-end](./evidencias/orquestacion/README.md)
 - [Evidencias de monitoreo y alertas](./evidencias/monitoreo/README.md)
+- [Evidencias de CI/CD](./evidencias/ci-cd/README.md)
 
 
 ## Estado
 
-La arquitectura, la infraestructura, la generación de datos y las capas Bronze, Silver y Gold, la orquestación end-to-end y el monitoreo operacional se encuentran implementadas y validadas.
-La visualización analítica en Power BI y la automatización CI/CD permanecen en construcción.
+La arquitectura, la infraestructura, la generación de datos y las capas Bronze, Silver y Gold, la orquestación end-to-end, el monitoreo operacional y la automatización CI/CD se encuentran implementadas y validadas.
+La visualización analítica en Power BI queda como mejora opcional.

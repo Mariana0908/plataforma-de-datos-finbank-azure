@@ -4,6 +4,7 @@ Este archivo se utilizará para llevar un registo de los cambios significativos 
 
 
 ### Added
+- **2026-08-25 — Mariana Ospina Henao:** implementación y validación de CI/CD con GitHub Actions, controles automáticos de calidad y seguridad, y despliegue protegido de Terraform en `dev` mediante OIDC.
 - **2026-08-25 — Mariana Ospina Henao:** implementación y validación del monitoreo operacional con Azure Monitor, Log Analytics, alertas de fallos y notificaciones por correo.
 - **2026-08-25 — Mariana Ospina Henao:** implementación y validación de la orquestación end-to-end mediante Azure Data Factory y Azure Databricks, incluyendo pipeline maestro, ejecución secuencial Bronze–Silver–Gold, transferencia dinámica de parámetros, autenticación mediante identidad administrada, job de Databricks, desencadenador diario, plantillas ARM y bundle validado mediante Databricks CLI.
 - **2026-08-25 — Mariana Ospina Henao:** implementación y validación de la capa Gold en Azure Databricks, incluyendo modelo dimensional, tablas de hechos, KPI bancarios, marts analíticos, controles de integridad, minimización de datos personales, conciliación Silver–Gold e idempotencia.
