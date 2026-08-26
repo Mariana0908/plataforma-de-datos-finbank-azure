@@ -1,0 +1,125 @@
+name: Integración continua
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  codigo-y-configuracion:
+    name: Python, JSON y YAML
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v7
+
+      - name: Configurar Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      - name: Instalar validador YAML
+        run: python -m pip install --disable-pip-version-check PyYAML==6.0.2
+
+      - name: Compilar archivos Python
+        run: python -m compileall -q data-generation pipelines
+
+      - name: Validar archivos JSON
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          excluded = {".git", ".terraform", "__pycache__"}
+          files = [
+              path
+              for path in Path(".").rglob("*.json")
+              if not any(part in excluded for part in path.parts)
+          ]
+
+          for path in files:
+              with path.open(encoding="utf-8-sig") as source:
+                  json.load(source)
+
+          print(f"JSON válidos: {len(files)}")
+          PY
+
+      - name: Validar archivos YAML
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import yaml
+
+          excluded = {".git", ".terraform", "__pycache__"}
+          files = [
+              path
+              for pattern in ("*.yml", "*.yaml")
+              for path in Path(".").rglob(pattern)
+              if not any(part in excluded for part in path.parts)
+          ]
+
+          for path in files:
+              with path.open(encoding="utf-8-sig") as source:
+                  list(yaml.safe_load_all(source))
+
+          print(f"YAML válidos: {len(files)}")
+          PY
+
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    defaults:
+      run:
+        working-directory: infra/terraform
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v7
+
+      - name: Configurar Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.14.6"
+
+      - name: Verificar formato
+        run: terraform fmt -check -recursive
+
+      - name: Inicializar sin backend remoto
+        run: terraform init -backend=false -input=false
+
+      - name: Validar configuración
+        run: terraform validate -no-color
+
+  seguridad:
+    name: Detección de secretos
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Descargar historial
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Analizar secretos con Gitleaks
+        uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_COMMENTS: "false"
