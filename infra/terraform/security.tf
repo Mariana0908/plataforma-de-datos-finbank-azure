@@ -18,7 +18,7 @@ resource "azurerm_key_vault" "main" {
 resource "azurerm_key_vault_access_policy" "terraform_operator" {
   key_vault_id = azurerm_key_vault.main.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azurerm_client_config.current.object_id
+  object_id    = var.terraform_operator_object_id
 
   secret_permissions = [
     "Get",
@@ -35,7 +35,22 @@ resource "azurerm_key_vault_secret" "sql_admin_login" {
   key_vault_id = azurerm_key_vault.main.id
 
   depends_on = [
-    azurerm_key_vault_access_policy.terraform_operator
+    azurerm_key_vault_access_policy.terraform_operator,
+    azurerm_key_vault_access_policy.ci_deployer
+  ]
+}
+
+resource "azurerm_key_vault_access_policy" "ci_deployer" {
+  key_vault_id = azurerm_key_vault.main.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = var.ci_deployer_object_id
+
+  secret_permissions = [
+    "Get",
+    "List",
+    "Set",
+    "Delete",
+    "Recover"
   ]
 }
 
@@ -45,6 +60,7 @@ resource "azurerm_key_vault_secret" "sql_admin_password" {
   key_vault_id = azurerm_key_vault.main.id
 
   depends_on = [
-    azurerm_key_vault_access_policy.terraform_operator
+    azurerm_key_vault_access_policy.terraform_operator,
+    azurerm_key_vault_access_policy.ci_deployer
   ]
 }
